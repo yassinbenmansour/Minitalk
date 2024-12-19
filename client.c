@@ -6,7 +6,7 @@
 /*   By: yabenman <yabenman@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 06:16:34 by yabenman          #+#    #+#             */
-/*   Updated: 2024/12/14 06:42:26 by yabenman         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:54:27 by yabenman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 void	send_character(int pid, char c) {
     int	i;
 
-    i = 7; // On commence par le bit de poids fort.
+    i = 7;
     while (i >= 0) {
-        if (c >> i & 1)       // Vérifie si le bit `i` est à 1.
-            kill(pid, SIGUSR2); // Envoie SIGUSR2 pour un bit à 1.
+        if (c >> i & 1)       
+            kill(pid, SIGUSR2);
         else
-            kill(pid, SIGUSR1); // Envoie SIGUSR1 pour un bit à 0.
+            kill(pid, SIGUSR1);
         i--;
-        usleep(500);          // Pause pour ne pas surcharger le serveur.
+        usleep(500);
     }
 }
 
@@ -30,12 +30,12 @@ int	check_error(char *str) {
     int	pid;
     int	i;
 
-    pid = ft_atoi(str);  // Conversion du PID en entier.
-    if (pid < 0)         // PID négatif non valide.
+    pid = ft_atoi(str);  
+    if (pid < 0)        
         return (0);
-    i = kill(pid, 0);    // Vérifie l'existence du processus.
+    i = kill(pid, 0);    
     if (i == -1)
-        return (0);      // Erreur si aucun processus n'existe.
+        return (0);      
     return (pid);
 }
 
@@ -45,15 +45,15 @@ int	main(int ac, char **av) {
     int		i;
 
     i = 0;
-    if (ac == 3) {              // Vérifie le nombre d'arguments.
-        pid = check_error(av[1]); // Vérifie le PID.
+    if (ac == 3) {              
+        pid = check_error(av[1]); 
         if (pid > 0) {
-            str = av[2];          // Récupère la chaîne à envoyer.
-            while (str[i]) {      // Envoie chaque caractère.
+            str = av[2];          
+            while (str[i]) {      
                 send_character(pid, str[i]);
                 i++;
             }
-            ft_putchar('\n');    // Ajoute un retour à la ligne.
+            ft_putchar('\n');    
         } else
             ft_putstr("incorrect pid! \n");
     } else

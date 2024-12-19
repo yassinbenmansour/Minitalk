@@ -6,45 +6,47 @@
 /*   By: yabenman <yabenman@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 06:16:53 by yabenman          #+#    #+#             */
-/*   Updated: 2024/12/14 06:42:34 by yabenman         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:54:13 by yabenman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
+pid_t g_pid = 0;
+
 void	handler(int signum, siginfo_t *sig_info, void *context) {
-    static char	ascii;  // Stocke temporairement le caractère.
-    static int	i;      // Compte les bits reçus.
+    static char	ascii;  
+    static int	i;      
 
     (void)context;
-    signum -= SIGUSR1;      // Convertit le signal en 0 ou 1.
-    if (g_pid != sig_info->si_pid) { // Nouveau client ?
-        ascii = 0;          // Réinitialise les variables.
+    signum -= SIGUSR1;      
+    if (g_pid != sig_info->si_pid) { 
+        ascii = 0;          
         i = 0;
         g_pid = sig_info->si_pid;
     }
-    if (signum)             // Si `signum == 1`, ajoute un bit à 1.
+    if (signum)             
         ascii = ascii << 1 | 1;
-    else                    // Sinon, ajoute un bit à 0.
+    else                  
         ascii = ascii << 1 | 0;
     i++;
-    if (i == 8) {           // Si 8 bits sont reçus :
-        ft_putchar(ascii);  // Affiche le caractère.
+    if (i == 8) {          
+        ft_putchar(ascii);  
         i = 0;
-        ascii = 0;          // Réinitialise pour le prochain caractère.
+        ascii = 0;          
     }
 }
 
 int	main(void) {
     struct sigaction	g;
 
-    g.sa_sigaction = &handler; // Associe le gestionnaire de signal.
-    g.sa_flags = SA_SIGINFO;   // Active les infos supplémentaires (siginfo_t).
+    g.sa_sigaction = &handler; 
+    g.sa_flags = SA_SIGINFO;   
     sigaction(SIGUSR1, &g, NULL);
     sigaction(SIGUSR2, &g, NULL);
     ft_putstr("PID = ");
-    ft_putnbr(getpid());      // Affiche le PID.
+    ft_putnbr(getpid());     
     ft_putstr("\n");
     while (1)
-        pause();              // Attend les signaux.
+        pause();              
 }
