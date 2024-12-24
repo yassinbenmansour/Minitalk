@@ -6,47 +6,51 @@
 /*   By: yabenman <yabenman@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 06:16:53 by yabenman          #+#    #+#             */
-/*   Updated: 2024/12/19 18:54:13 by yabenman         ###   ########.fr       */
+/*   Updated: 2024/12/24 03:53:51 by yabenman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-pid_t g_pid = 0;
+pid_t	g_pid = 0;
 
-void	handler(int signum, siginfo_t *sig_info, void *context) {
-    static char	ascii;  
-    static int	i;      
+void	handler(int signum, siginfo_t *sig_info, void *context)
+{
+	static char	ascii;
+	static int	i;
 
-    (void)context;
-    signum -= SIGUSR1;      
-    if (g_pid != sig_info->si_pid) { 
-        ascii = 0;          
-        i = 0;
-        g_pid = sig_info->si_pid;
-    }
-    if (signum)             
-        ascii = ascii << 1 | 1;
-    else                  
-        ascii = ascii << 1 | 0;
-    i++;
-    if (i == 8) {          
-        ft_putchar(ascii);  
-        i = 0;
-        ascii = 0;          
-    }
+	(void)context;
+	signum -= SIGUSR1;
+	if (g_pid != sig_info->si_pid)
+	{
+		ascii = 0;
+		i = 0;
+		g_pid = sig_info->si_pid;
+	}
+	if (signum)
+		ascii = ascii << 1 | 1;
+	else
+		ascii = ascii << 1 | 0;
+	i++;
+	if (i == 8)
+	{
+		ft_putchar(ascii);
+		i = 0;
+		ascii = 0;
+	}
 }
 
-int	main(void) {
-    struct sigaction	g;
+int	main(void)
+{
+	struct sigaction	g;
 
-    g.sa_sigaction = &handler; 
-    g.sa_flags = SA_SIGINFO;   
-    sigaction(SIGUSR1, &g, NULL);
-    sigaction(SIGUSR2, &g, NULL);
-    ft_putstr("PID = ");
-    ft_putnbr(getpid());     
-    ft_putstr("\n");
-    while (1)
-        pause();              
+	g.sa_sigaction = &handler;
+	g.sa_flags = SA_SIGINFO;
+	sigaction(SIGUSR1, &g, NULL);
+	sigaction(SIGUSR2, &g, NULL);
+	ft_putstr("PID = ");
+	ft_putnbr(getpid());
+	ft_putstr("\n");
+	while (1)
+		pause();
 }

@@ -6,10 +6,9 @@
 /*   By: yabenman <yabenman@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 06:16:48 by yabenman          #+#    #+#             */
-/*   Updated: 2024/12/19 18:54:17 by yabenman         ###   ########.fr       */
+/*   Updated: 2024/12/24 03:54:10 by yabenman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINITALK_H
 # define MINITALK_H
